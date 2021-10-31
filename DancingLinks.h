@@ -8,10 +8,16 @@
 
 #include <iostream>
 
-#define DEBUG_DISPLAY_CONSTRUCTION_INFO 0
-#define DEBUG_DISPLAY_LINKING_INFO 0
-#define DEBUG_DISPLAY_SEARCH_CALLS 0
-#define DEBUG_DISPLAY_SEARCH_INFO 0
+#define DEBUG_DISPLAY_CONSTRUCTION_INFO			0
+#define DEBUG_DISPLAY_LINKING_INFO				0
+#define DEBUG_DISPLAY_COVER_INFO				0
+#define DEBUG_DISPLAY_OPTIONS_TO_CONSTRAINTS	0
+#define DEBUG_DISPLAY_CONSTRAINTS_TO_OPTIONS	0
+
+#define DEBUG_DISPLAY_SEARCH_CALLS				0
+#define DEBUG_DISPLAY_SEARCH_CHOICE				0
+#define DEBUG_DISPLAY_SEARCH_ACCESSES			0
+#define DEBUG_DISPLAY_SEARCH_INFO				0
 
 using namespace std;
 
@@ -70,12 +76,13 @@ public:
 */
 class DancingLinksColumn : public FourWayLinkedNode {
 private:
-	char name;
+	char* name;
 	int size;
 public:
-	DancingLinksColumn(char n);
+	DancingLinksColumn(char* n);
+	~DancingLinksColumn();
 
-	char get_name();
+	char* get_name();
 	int	 get_size();
 
 	DancingLinksColumn* get_left();
@@ -94,14 +101,21 @@ public:
 *   A class used to represent the entire matrix used by the dancing
 *   links algorithm as a data object.
 */
-class DancingLinksMatrix {
-public:
+class DancingLinksMatrix {	
+private:
 	DancingLinksColumn* h;
+public:
+	DancingLinksMatrix(bool piece_at_pos[], int num_columns, int num_rows);
+	~DancingLinksMatrix();
 
-	DancingLinksMatrix(bool bitfield[], int num_columns);
-	int search(int k, DancingLinksNode** o);
-	void print();
-	void print_solution(DancingLinksNode** o);
+	int full_search(int k, DancingLinksNode** o);	
+	int partial_search(int k, DancingLinksNode** o);
+	int* solve();
+	int get_num_columns();
+	int get_num_rows();
+
+	void print_grid();
+	void print_setwise(DancingLinksNode** o);
 };
 
 #endif
